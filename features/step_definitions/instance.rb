@@ -7,8 +7,7 @@ Given(/^I can access the AWS environment$/) do
 end
 
 Given(/^I know what EC2 instance to look at$/) do
-  	instance_id = "i-66f6dcbe" 
-  	resp = @client.describe_instances(filters: [{name: "instance-id", values: [instance_id]}]).reservations
+  	resp = @client.describe_instances(filters: [{name: "instance-id", values: [ENV['instance_id']]}]).reservations
 	resp.each do |i|
 		@instance = i.instances.first 
 		break	
