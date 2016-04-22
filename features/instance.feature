@@ -1,4 +1,4 @@
-@instance
+@ec2-instance
 Feature: Scripted creation of EC2 Instance 
     As a continuous delivery engineer
     I would like my instance to be installed and configured correctly
@@ -10,7 +10,7 @@ Feature: Scripted creation of EC2 Instance
 
     Scenario: The EC2 instance is configured correctly
         When I lookup the instance information
-        Then I should see it is a "t2.micro" instance
+        Then I should see it is a "m1.small" instance
 	And  I should see that its security group allows port "22"
         And  I should see that its security group allows port "80"
 	And  I should see that it is associated with an elastic IP

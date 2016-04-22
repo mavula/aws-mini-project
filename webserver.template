@@ -153,6 +153,10 @@
     "URL" : {
       "Value" : { "Fn::Join" : [ "", ["http://", { "Fn::GetAtt" : ["EC2Instance", "PublicIp"] }]]},
       "Description" : "Newly created application URL"
-    }
+    },
+	"InstanceId" : {
+    		"Description": "The Instance ID",  
+    		"Value" : { "Ref" : "EC2Instance" }
+  	}
   }
 }

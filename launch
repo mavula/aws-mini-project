@@ -1,0 +1,80 @@
+#!/usr/bin/env ruby
+
+require 'aws-sdk-core'
+require 'trollop'
+
+## GLOBAL VARIABLES
+$timeout = "60" # in mins
+$tests = "runtests.sh";
+$template = "webserver.template"
+$data = Hash.new
+
+## USING TROLLOP FOR COMMAND LINE OPTIONS
+opts = Trollop::options do
+	opt :aws_region, "AWS region to use", :default => "us-west-2", :type => :string
+  	opt :key_name, "EC2 keypair to use on the instances created", :type => :string, :required => true
+	opt :stack_name, "Name of the cloud formation stack", :default => "mini-project", :type => :string
+	opt :create, "create stack"
+	opt :delete, "Delete stack"
+end
+
+## CREATE, DELETE, STATUS, OUTPUTS OF CLOUDFORMATION STACK
+class CloudFormation 
+	def initialize(aws_region, stack_name)
+		@cfn = Aws::CloudFormation::Client.new(region: aws_region)
+		@cfn_stack_name = stack_name
+  	end
+	
+	def getStackStatus
+		stack_status = @cfn.describe_stacks(stack_name: @cfn_stack_name).stacks.first[:stack_status] 
+		return stack_status
+	end
+			
+	def createStack
+		@cfn.create_stack stack_name: @cfn_stack_name,
+      				  template_body: File.open($template, "rb").read,
+      				  disable_rollback: true, timeout_in_minutes: $timeout,
+      				  parameters: [
+      				  	{ parameter_key: "KeyName", parameter_value: "aws-test" }
+    				  ] 
+	end
+	
+	def delStack
+		@cfn.delete_stack stack_name: @cfn_stack_name
+	end
+
+	def getOutputs
+		outputs = @cfn.describe_stacks(stack_name: @cfn_stack_name).stacks.first[:outputs]
+                outputs.each do |output|
+			$data[output.output_key] = output.output_value ## KEYPAIR VALUES IN HASH TO USE AS ARGUMENTS FOR CUCUMBER TESTS 
+		end	
+	end
+end
+
+## DEFAULTS TO CREATE STACK UNLESS DELETE REQUEST/FLAGGED FROM ARGUMENTS
+if opts[:delete]
+        cfn = CloudFormation.new(opts[:aws_region], opts[:stack_name])
+        print "Deleting Stack - #{opts[:stack_name]} ..."
+        cfn.delStack
+        while (/IN_PROGRESS/i =~ cfn.getStackStatus)
+                print "."
+                sleep 10
+        end
+        puts "\nFinal Status: Deleted.\n"
+else 
+	cfn = CloudFormation.new(opts[:aws_region], opts[:stack_name]) 
+	print "Creating Stack - #{opts[:stack_name]} ..."
+	cfn.createStack
+	while (/IN_PROGRESS/i =~ cfn.getStackStatus)
+    		print "."
+		sleep 10
+	end
+	final_status = cfn.getStackStatus
+	puts "\nFinal Status: #{final_status}\n"
+	
+	if /CREATE_COMPLETE/i =~ final_status 	
+		puts "========= Running Tests ============="
+		cfn.getOutputs
+		system("./#{$tests} #{opts[:aws_region]} #{$data['InstanceId']} #{$data['URL']}") 
+	end
+end
