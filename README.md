@@ -35,11 +35,11 @@ Run this command to set everything up:
 
 The parameters are:
 
-* **key-name**: the name of an EC2 keypair that exists in that region. It will be linked to the instance.
-* **aws-region**: The AWS region you want to run everything in. Defaults to US-West-2, Oregon.
-* **stack-name**: Name of the CloudFormation stack.
-* **create**: flag to create stack. Defaults to true.  
-* **delete**: flag to delete stack. Defaults to false. 
+* **key-name**: [required] the name of an EC2 keypair that exists in that region. It will be linked to the instance. 
+* **aws-region**: [optional] The AWS region you want to run everything in. Defaults to US-West-2, Oregon.
+* **stack-name**: [optional] Name of the CloudFormation stack. Defaults to mini-project.
+* **create**: [optional] flag to create stack. Defaults to true.  
+* **delete**: [optional] flag to delete stack. Defaults to false. 
 
 
 Infrastructure Tests:
