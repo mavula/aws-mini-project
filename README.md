@@ -10,9 +10,8 @@ Dependencies:
 This project requires ruby, aws-sdk to be installed on your machine, to setup run below commands. I assume you using Amazon Linux AMI. 
 
 ```
-sudo yum install ruby rubygems
+sudo yum install ruby rubygems libxslt-devel rubygem-io-console rubygem20-nokogiri
 sudo gem install aws-sdk bundler cucumber
-bundle install
 ```
 
 Now configure AWS Credentials
@@ -28,7 +27,7 @@ Default output format [None]: json
 Usage:
 ============================
 
-Clone this repository and run the Ruby script inside that will spin up the EC2 instance, and then Apache webserver inside of it. 
+Clone this repository, bundle install and run the Ruby script inside that will spin up the EC2 instance, and then Apache webserver inside of it. 
 Run this command to set everything up:
 
     ruby launch --aws-region aws-region-to-build-in --key-name your-ec2-keypair-name --stack-name mini-project
