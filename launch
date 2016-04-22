@@ -72,10 +72,17 @@ else
 	end
 	final_status = cfn.getStackStatus
 	puts "\nFinal Status: #{final_status}\n"
-	
+
 	if /CREATE_COMPLETE/i =~ final_status 	
 		puts "========= Running Tests ============="
 		cfn.getOutputs
 		system("./#{$tests} #{opts[:aws_region]} #{$data['InstanceId']} #{$data['URL']}") 
+	end
+
+	uri = URI.parse(URI.escape("#{$data['URL']}"))
+        response = Net::HTTP.get_response(uri)
+	if /Automation for the people/i =~ response.body
+		puts "\n\nWoohoo! Automation for the people is live!"
+		puts "#{$data['URL']}\n"   
 	end
 end
