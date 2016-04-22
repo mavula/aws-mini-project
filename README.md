@@ -1,7 +1,7 @@
 AWS MINI PROJECT with Infrastructure tests
 ======================
 
-This project uses AWS SDK Ruby and CloudFormation template to deploy and configure an EC2 Instance with Apache httpd and a message <b>Automation for the People</b> in index.html in document root and runs infrastructure tests using Cucumber.
+This project uses AWS SDK Ruby and CloudFormation template to deploy and configure an EC2 Instance with Apache httpd and creates index.html with a message <b>Automation for the People</b> on a default VPC and subnet and runs infrastructure tests using Cucumber.
  
 CloudFormation template will create Security Group, launch a t2.micro instance and assign Elastic IP.  
 
@@ -19,8 +19,8 @@ Now configure AWS Credentials
 
 ```
 $ aws configure
-AWS Access Key ID [None]: AKIAIOSFODNN7EXAMPLE
-AWS Secret Access Key [None]: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+AWS Access Key ID [None]:   XXXXXXXXXXXXXXXXXXXXXXXXXXX 
+AWS Secret Access Key [None]: XXXXXXXXXXXXXXXXXXXXXXXXXXX 
 Default region name [None]: us-west-2
 Default output format [None]: json
 ```
