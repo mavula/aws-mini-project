@@ -1,4 +1,4 @@
-AWS MINI PROJECT WITH INFRASTRUCTURE TESTS
+AWS MINI PROJECT with Infrastructure tests
 ======================
 
 This project uses AWS SDK Ruby and CloudFormation template to deploy and configure an EC2 Instance with Apache httpd and a message <b>Automation for the People</b> in index.html in document root and runs infrastructure tests using Cucumber.
