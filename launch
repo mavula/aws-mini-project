@@ -30,6 +30,14 @@ class CloudFormation
 		stack_status = @cfn.describe_stacks(stack_name: @cfn_stack_name).stacks.first[:stack_status] 
 		return stack_status
 	end
+	
+	def checkStack
+		found = false		
+		@cfn.list_stacks(stack_status_filter: ["CREATE_COMPLETE","CREATE_IN_PROGRESS", "ROLLBACK_IN_PROGRESS"]).stack_summaries.each do |stack|
+			found = true if stack.stack_name == @cfn_stack_name
+		end
+		return found 
+	end 
 			
 	def createStack
 		@cfn.create_stack stack_name: @cfn_stack_name,
@@ -55,6 +63,7 @@ end
 ## DEFAULTS TO CREATE STACK UNLESS DELETE REQUEST/FLAGGED FROM ARGUMENTS
 if opts[:delete]
         cfn = CloudFormation.new(opts[:aws_region], opts[:stack_name], opts[:key_name])
+	abort("Stack #{opts[:stack_name]} does not exist. Please check stack name.\n") unless cfn.checkStack
         print "Deleting Stack - #{opts[:stack_name]} ..."
         cfn.delStack
         while (/IN_PROGRESS/i =~ cfn.getStackStatus)
@@ -63,7 +72,8 @@ if opts[:delete]
         end
         puts "\nFinal Status: Deleted.\n"
 else 
-	cfn = CloudFormation.new(opts[:aws_region], opts[:stack_name], opts[:key_name]) 
+	cfn = CloudFormation.new(opts[:aws_region], opts[:stack_name], opts[:key_name])
+	abort("Stack #{opts[:stack_name]} already exist. Please check stack name.\n") if cfn.checkStack 
 	print "Creating Stack - #{opts[:stack_name]} ..."
 	cfn.createStack
 	while (/IN_PROGRESS/i =~ cfn.getStackStatus)
