@@ -20,9 +20,10 @@ end
 
 ## CREATE, DELETE, STATUS, OUTPUTS OF CLOUDFORMATION STACK
 class CloudFormation 
-	def initialize(aws_region, stack_name)
+	def initialize(aws_region, stack_name, key_name)
 		@cfn = Aws::CloudFormation::Client.new(region: aws_region)
 		@cfn_stack_name = stack_name
+		@cfn_key_name = key_name
   	end
 	
 	def getStackStatus
@@ -35,7 +36,7 @@ class CloudFormation
       				  template_body: File.open($template, "rb").read,
       				  disable_rollback: true, timeout_in_minutes: $timeout,
       				  parameters: [
-      				  	{ parameter_key: "KeyName", parameter_value: "aws-test" }
+      				  	{ parameter_key: "KeyName", parameter_value: @cfn_key_name }
     				  ] 
 	end
 	
@@ -53,7 +54,7 @@ end
 
 ## DEFAULTS TO CREATE STACK UNLESS DELETE REQUEST/FLAGGED FROM ARGUMENTS
 if opts[:delete]
-        cfn = CloudFormation.new(opts[:aws_region], opts[:stack_name])
+        cfn = CloudFormation.new(opts[:aws_region], opts[:stack_name], opts[:key_name])
         print "Deleting Stack - #{opts[:stack_name]} ..."
         cfn.delStack
         while (/IN_PROGRESS/i =~ cfn.getStackStatus)
@@ -62,7 +63,7 @@ if opts[:delete]
         end
         puts "\nFinal Status: Deleted.\n"
 else 
-	cfn = CloudFormation.new(opts[:aws_region], opts[:stack_name]) 
+	cfn = CloudFormation.new(opts[:aws_region], opts[:stack_name], opts[:key_name]) 
 	print "Creating Stack - #{opts[:stack_name]} ..."
 	#cfn.createStack
 	while (/IN_PROGRESS/i =~ cfn.getStackStatus)

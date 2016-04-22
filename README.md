@@ -1,2 +1,48 @@
-# aws-mini-project
-This is a mini-project to provision an environment resources using aws, ruby, cucumber
+AWS MINI PROJECT WITH INFRASTRUCTURE TESTS
+======================
+
+This project uses AWS SDK Ruby and CloudFormation template to deploy and configure an EC2 Instance with Apache httpd and a message <b>Automation for the People</b> in index.html in document root and runs infrastructure tests using Cucumber.
+ 
+CloudFormation template will create Security Group, launch a t2.micro instance and assign Elastic IP.  
+
+Dependencies:
+======================
+This project requires ruby, aws-sdk to be installed on your machine, to setup run below commands. I assume you using Amazon Linux AMI. 
+
+```
+sudo yum install ruby rubygems
+sudo gem install aws-sdk bundler cucumber
+bundle install
+```
+
+Now configure AWS Credentials
+
+```
+$ aws configure
+AWS Access Key ID [None]: AKIAIOSFODNN7EXAMPLE
+AWS Secret Access Key [None]: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+Default region name [None]: us-west-2
+Default output format [None]: json
+```
+
+Usage:
+============================
+
+Clone this repository and run the Ruby script inside that will spin up the EC2 instance, and then Apache webserver inside of it. 
+Run this command to set everything up:
+
+    ruby launch --aws-region aws-region-to-build-in --key-name your-ec2-keypair-name --stack-name mini-project
+
+The parameters are:
+
+* **key-name**: the name of an EC2 keypair that exists in that region. It will be linked to the instance.
+* **aws-region**: The AWS region you want to run everything in. Defaults to US-West-2, Oregon.
+* **stack-name**: Name of the CloudFormation stack.
+* **create**: flag to create stack. Defaults to true.  
+* **delete**: flag to delete stack. Defaults to false. 
+
+
+Infrastructure Tests:
+===================================
+
+launch script initiates infrastructure tests after stack creation. See runtests.sh to kick off without ruby launch script.  

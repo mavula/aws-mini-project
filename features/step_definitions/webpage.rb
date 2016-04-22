@@ -1,4 +1,3 @@
-require 'aws-sdk-core'
 require 'rspec/expectations'
 require 'net/http'
 
@@ -10,7 +9,7 @@ end
 When(/^I browse the webpage$/) do
 	@weburl = URI.parse("#{@url}")
 	@req = Net::HTTP.new(@weburl.host, @weburl.port)
-	@req.read_timeout = 20
+	@req.read_timeout = 10
 	expect(@req).to be 
 end
 
