@@ -60,7 +60,7 @@ class CloudFormation
 	end
 end
 
-## DEFAULTS TO CREATE STACK UNLESS DELETE REQUEST/FLAGGED FROM ARGUMENTS
+## DEFAULTS CREATE STACK UNLESS DELETE REQUEST/FLAGGED FROM ARGUMENTS
 if opts[:delete]
         cfn = CloudFormation.new(opts[:aws_region], opts[:stack_name], opts[:key_name])
 	abort("Stack #{opts[:stack_name]} does not exist. Please check stack name.\n") unless cfn.checkStack
@@ -68,7 +68,7 @@ if opts[:delete]
         cfn.delStack
         while (/IN_PROGRESS/i =~ cfn.getStackStatus)
                 print "."
-                sleep 10
+                sleep 5 
         end
         puts "\nFinal Status: Deleted.\n"
 else 
