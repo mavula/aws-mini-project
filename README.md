@@ -1,7 +1,7 @@
 AWS MINI PROJECT with Infrastructure tests
 ======================
 
-This project uses AWS SDK Ruby and CloudFormation template to deploy and configure an EC2 Instance with Apache httpd and creates index.html with a message <b>Automation for the People</b> on a default VPC and subnet and runs infrastructure tests using Cucumber.
+This project uses AWS SDK Ruby and CloudFormation template to deploy and configure an EC2 Instance with Apache httpd and creates index.html with a message <b>Automation for the People</b> on region's default VPC and subnet and runs infrastructure tests using Cucumber.
  
 CloudFormation template will create Security Group, launch a t2.micro instance and assign Elastic IP.  
 
