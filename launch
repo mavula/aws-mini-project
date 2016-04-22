@@ -64,7 +64,7 @@ if opts[:delete]
 else 
 	cfn = CloudFormation.new(opts[:aws_region], opts[:stack_name]) 
 	print "Creating Stack - #{opts[:stack_name]} ..."
-	cfn.createStack
+	#cfn.createStack
 	while (/IN_PROGRESS/i =~ cfn.getStackStatus)
     		print "."
 		sleep 10
