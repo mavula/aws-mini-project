@@ -14,7 +14,7 @@ When(/^I browse the webpage$/) do
 end
 
 Then(/^I should see it is active$/) do
-	res = @req.request_head(@weburl.path)
+	res = @req.request_head(@weburl)
         expect(res.code).to eq("200"), "Webpage not found"
 end
 

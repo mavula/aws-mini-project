@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh 
 # This script initiates infrastructure tests ##
 # see feature/instance.feature  
 
@@ -10,7 +10,7 @@ if [[ $AWS_REGION && $instance_id && $url ]];
 then
 	export AWS_REGION=$AWS_REGION
 	export instance_id=$instance_id
-	export url=$url 
+	export URL=$url 
 
 	cucumber .
 else
